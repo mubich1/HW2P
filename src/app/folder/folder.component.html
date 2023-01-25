@@ -1,0 +1,112 @@
+<div>
+    <div class=" d-flex d-flex justify-content-between align-items-center sticky-top  m-0 bg p-3 ">
+        <div class="d-flex">
+            <i class="bi bi-caret-left-fill align-items-center" (click)="navigateToHome()"></i>
+        </div>
+        <div>
+            <h1 class="d-flex mb-0 justify-content-between">{{currentFolder || 'תיקיה'}}</h1>
+        </div>
+        <div class="pr-2 ">
+            <div *ngIf="isFolder">
+                <i class="bi bi-folder-plus"  data-bs-toggle="modal" data-bs-target="#staticBackdrop"></i>
+            </div>
+        </div>
+        <input hidden type="file" #filepicker (change)="fileSelected($event)" />
+    </div>
+    <!-- Card -->
+    <div class="card w-full  m-3">
+        <div class="card-header ">רשימת תיקיות</div>
+        <div class="card-body">
+            <table class="table">
+                <tbody>
+                    <div>
+                        <span *ngIf="folderLists.length == 0">No documents found</span>
+
+                    </div>
+                    <tr *ngFor="let folder of folderLists">
+
+                        <td *ngIf="!folder.isFile" (click)="itemClicked(folder)"><i class="bi bi-folder pr-2"></i>
+                            {{folder.name}} </td>
+                        <div class="dot-icon" [hidden]="folder.isFile">
+                            <div class="btn-group dropstart">
+                                <i class="bi bi-three-dots-vertical " data-bs-toggle="dropdown"
+                                    aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    <!-- <li class="dropdown-item">Share</li> -->
+                                    <li class="dropdown-item" (click)="delete(folder)">Delete</li>
+                                    <li class="dropdown-item" (click)="openPopup(folder)">Rename</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="grid-container">
+                <div class="grid-item" *ngFor="let file of folderLists">
+                    <div class="d-flex justify-content-center row" *ngIf="file.isFile">
+                        <i class="bi bi-file-earmark col" (click)="itemClicked(file)"></i><span class="col">{{file.name}} </span>
+                        <div class="dot-icon-file">
+                            <div class="btn-group dropstart">
+                                <i class="bi bi-three-dots-vertical " data-bs-toggle="dropdown"
+                                    aria-expanded="false"></i>
+                                <ul class="dropdown-menu">
+                                    <li class="dropdown-item" (click)="shareFile(file)">Share</li>
+                                    <li class="dropdown-item" (click)="delete(file)">Delete</li>
+                                    <!-- <li class="dropdown-item" (click)="openPopup(file)">Rename</li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!isFolder">
+                    <i class="bi bi-file-earmark-plus" (click)="addFile()"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Create new folder Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class='modal-dialog'>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">צור תיקיה</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form #form="ngForm" (ngSubmit)="submitForm(form.value)">
+                <div class="modal-body">
+                    <input type="text" class="form-control" name="folderName" #name="ngModel" [(ngModel)]="folderName"
+                        placeholder="הזן את שם התיקיה" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">לְבַטֵל</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"
+                        (click)="createFolder()">לשמור</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Rename Model -->
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+    <div [ngClass]="isFolder?'modal-dialog':'modal-dialog-file'" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h4 class="modal-title">שנה שם</h4>
+            </div>
+            <form #renameForm="ngForm" (ngSubmit)="changeName(renameForm.value)">
+                <div class="modal-body">
+                    <input type="text" class="form-control" name="folder" [ngModel]="changeFolderName"
+                        #folder="ngModel">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

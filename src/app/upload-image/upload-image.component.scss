@@ -1,0 +1,107 @@
+.main{
+    opacity: .5;
+    pointer-events: none;
+}
+.bg {
+
+    // background-color: #3C5E95 ;
+    h1 {
+        color: #fff;
+        font-size: 21px;
+    }
+
+    i {
+        color: #fff;
+    }
+
+    text-align: center;
+
+    h1 {
+        font-size: 22px;
+    }
+}
+.ocrimage{
+    display: flex;
+    justify-content: center;
+}
+.backButton {
+    width: 20px;
+}
+
+.card-body {
+    min-height: 450px;
+    max-height: 500px;
+    // overflow-y: scroll;
+    overflow: auto;
+    td {
+        border-top: 0;
+        margin-left: 100px;
+
+        span {
+            padding-left: 10px;
+        }
+
+        i {
+            font-size: 25px;
+        }
+        .dropstart{
+            overflow: scroll;
+        }
+    }
+
+}
+.iiii{
+    position: absolute;
+    width: 100%;
+    height: 100%;   
+}
+
+.snip {
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    z-index: 999;
+    .spinner-border{
+        width: 4rem; 
+        height: 4rem;
+    }
+}
+
+.modal-body {
+    height: 50%;
+}
+
+.button-main {
+    position: absolute;
+    right: 10%;
+    left: 10%;
+    bottom: 40px;
+
+    .button-wrap {
+        appearance: none;
+        background-color: transparent;
+        border: 4px solid #AD67EA;
+        border-radius: 30px;
+        box-sizing: border-box;
+        color: #AD67EA;
+        display: inline-block;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0;
+        min-height: 60px;
+        min-width: 0;
+        outline: none;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        width: 100px;
+        will-change: transform;
+
+        i {
+            font-size: 30px;
+        }
+    }
+}

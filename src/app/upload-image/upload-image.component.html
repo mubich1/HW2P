@@ -1,0 +1,105 @@
+<div class="m-0" [ngClass]="workerReady ? 'main':''">
+    <div class="p-3 d-flex m-0  d-flex justify-content-between bg align-items-center">
+        <div>
+            <i class="bi bi-caret-left-fill " (click)="navigateToHome()"></i>
+        </div>
+        <div class=" d-flex justify-content-center ">
+            <h1>העלה תמונה ממצלמה/גלריה</h1>
+        </div>
+    </div>
+    <!-- <input type="file" id="file_input" hidden #fileInput class="">  -->
+    <div hidden>
+    <img id="input_image">  
+    <canvas id='canvas'></canvas>
+	<canvas id='c1'></canvas>
+	<canvas id='c2'></canvas>
+	<canvas id='c3'></canvas>
+	<canvas id='c4'></canvas>
+	<canvas id='c5'></canvas>
+	<canvas id='c6'></canvas>
+	<canvas id='c7'></canvas>
+	<canvas id='c8'></canvas>
+	<canvas id='c9'></canvas>
+	<canvas id='c10'></canvas>
+	<canvas id='c11'></canvas>
+	<canvas id='c12'></canvas>
+	<canvas id='c13'></canvas>
+	<canvas id='c14'></canvas>
+	<canvas id='c15'></canvas>
+	<h2 id='output'></h2> 
+</div>
+    <div class="card w-full h-5 m-3">
+        <div class="card-header ">רשימת קבצים</div>
+        <div class="card-body">
+            <table class="table">
+                <tbody>
+                    <tr *ngFor="let file of fileList , let i=index">
+                        <td (click)="viewImge(file)"><img src="{{file.data}}" id="{{file.name}}"  hidden><i class="bi bi-card-image"></i><span>{{file.name}}</span> </td>
+                        <div class="btn-group dropstart" style="position: absolute; right:10px">
+                            <i class="bi bi-three-dots-vertical dot-icon" data-bs-toggle="dropdown"
+                                aria-expanded="false"></i>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item" (click)="shareImage(file)">Share</li>
+                                <li class="dropdown-item" (click)="deletePhoto(i)">Delete</li>
+                                <li class="dropdown-item" (click)="openPopupRename(file)">Rename</li>
+                                <li class="dropdown-item" (click)="doOCR(file)">OCR Converter</li>
+                            </ul>
+                        </div>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center button-main">
+        <button class="ml-2 button-wrap" (click)="openCamera()"><i class="bi bi-camera-fill"></i></button>
+        <button class="button-wrap" (click)="pickImageFromGallery()"><i class="bi bi-images"></i></button>
+    </div>
+</div>
+
+<!-- OCR result model -->
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyle}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">OCR Result</h4>
+            </div>
+            <canvas id="mycanvas" hidden></canvas>
+            <div class="modal-body">
+                <div class="ocrimage">
+                    <img src="{{imageWithResult}}" width="60">
+                </div>
+                <textarea class="textare" class="form-control" rows="6">{{predicted}}</textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closePopup()">
+                    Close
+                </button>
+                <button class="btn btn-primary" (click)="saveTextDoc()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="snip" *ngIf="workerReady && captureProgress >= 0">
+    <div class="spinner-border text-dark " role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<!-- Rename Model -->
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayStyleRename}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h4 class="modal-title">שנה שם</h4>
+            </div>
+            <form #renameForm="ngForm" (ngSubmit)="changeName(renameForm.value)">
+                <div class="modal-body">
+                    <input type="text" class="form-control" name="folder" [ngModel]="oldFileName" #folder="ngModel">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

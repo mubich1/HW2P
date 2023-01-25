@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">   
+<head>  
+    <title>OPENCV_JSTEST</title>  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+	 <script async src="opencv-js.js"></script> 
+	 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+ </head> 
+ <body>
+    <img id="input_image">  
+    <input type="file" id="file_input"> 
+    <canvas id='canvas'></canvas>
+	<canvas id='c1'></canvas>
+	<canvas id='c2'></canvas>
+	<canvas id='c3'></canvas>
+	<canvas id='c4'></canvas>
+	<canvas id='c5'></canvas>
+	<canvas id='c6'></canvas>
+	<canvas id='c7'></canvas>
+	<canvas id='c8'></canvas>
+	<canvas id='c9'></canvas>
+	<canvas id='c10'></canvas>
+	<canvas id='c11'></canvas>
+	<canvas id='c12'></canvas>
+	<canvas id='c13'></canvas>
+	<canvas id='c14'></canvas>
+	<canvas id='c15'></canvas>
+	<h2 id='output'></h2>
+ </body>  
+ <script>  
+     
+	  // use await in other code
+     let img_input = document.getElementById('input_image');  
+     let file_input = document.getElementById('file_input');
+	 
+     file_input.addEventListener('change',(e)=> {  
+	     img_input.src = URL.createObjectURL(e.target.files[0])
+     },false);
+     
+     img_input.onload = function(){  
+		detect_color();
+
+     }  
+
+	let index_to_char = "אבגדהוזחטיכךלמםנןסעפףצץקרשת";
+	 
+	let pred;
+	async function makePrediction(img){
+    const model = await  tf.loadLayersModel('model.json',console.log('Loaded Model'));
+    pred = await model.predict(img).argMax(-1).data();
+	console.log(index_to_char.charAt(pred[0]))
+	return pred
+	}
+
+	 
+	 
+	function detect_color(){
+		let dst = new cv.Mat();
+		let thr = new cv.Mat();
+		let inputImage = cv.imread(img_input);
+		let contours = new cv.MatVector();
+		let hierarchy = new cv.Mat();
+		var filtered_contours = new cv.MatVector();;
+
+		cv.cvtColor(inputImage, dst, cv.COLOR_RGB2GRAY, 0);		
+		cv.threshold(dst, dst, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU);
+		let M = cv.Mat.ones(3, 3, cv.CV_8U);
+		let anchor = new cv.Point(0, 0);
+		cv.erode(dst, thr, M, anchor, 3);
+		cv.findContours(thr, contours, hierarchy, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+		
+		for(var i = 0; i < contours.size(); ++i ){
+			if (hierarchy.intPtr(0, i)[1] > -1){
+				filtered_contours.push_back(contours.get(i))
+			}
+		}
+
+		//Get area for all contours so we can find the biggest
+		let sortableContours = [];
+		for (let i = 0; i < filtered_contours.size(); i++) {
+			let cnt = filtered_contours.get(i);
+			let rect = cv.boundingRect(cnt);
+			sortableContours.push({ x: rect['x'], contour: cnt });
+		}
+		sortableContours = sortableContours.sort((item1, item2) => { return (item1.x > item2.x) ? -1 : (item1.x < item2.x) ? 1 : 0; });
+
+		for (var i = 0; i < sortableContours.length; i ++){
+				rect =cv.boundingRect(sortableContours[i]['contour'])
+				if (rect.width>10 && rect.width<100 && rect.height>10){
+					patch = dst.roi(rect)
+					cv.resize(patch,patch,new cv.Size(28,28));
+					cv.imshow("c"+(i+1), patch)
+					img = tf.tensor(patch.data.map(function(item) { return item/255}), [1,patch.rows, patch.cols,1])
+					console.log("iMG IMG",img);
+					prediction = makePrediction(img);
+					// console.log(prediction)
+				}
+		}
+		// console.log(sortableContours['contour'])
+		cv.imshow('canvas', dst);
+		// h = inputImage.matSize[0]
+		// w = inputImage.matSize[1]
+
+		// 
+		// let imsize = new cv.Size(w,h);
+		// let dsize = new cv.Size(28,28);
+		// cv.resize(dst, dst, dsize, 0, 0, cv.INTER_AREA);
+		
+	}
+	 
+ </script>
+ </html>

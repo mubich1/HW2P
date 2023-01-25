@@ -1,0 +1,71 @@
+.bg {
+
+    // background-color: #3C5E95 ;
+    h1 {
+        color: #fff;
+    }
+
+    i {
+        color: #fff;
+    }
+
+    text-align: center;
+}
+
+.dot-icon {
+    position: absolute;
+    right: 5px;
+}
+
+.card-body {
+    min-height: 500px;
+
+    i {
+        font-size: 20px;
+    }
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 2px;
+
+    i {
+        font-size: 80px;
+        text-align: center;
+    }
+}
+
+.grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0px;
+    font-size: 10px;
+    text-align: center;
+
+    i {
+        font-size: 80px;
+    }
+}
+.dot-icon-file{
+    position: absolute;
+    .dropdown-menu{
+        max-width: 90px;
+    min-width: 85px
+    }
+    .modal-content{
+        max-width: 80%;
+
+    }
+    i{
+        position: absolute;
+        font-size: 30px;
+        right: -57px;
+        top: -4px;
+        margin: 5px;
+    }
+   
+}
+
+.modal-dialog-file{
+    max-width: 78%;
+}
