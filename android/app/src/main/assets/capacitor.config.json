@@ -1,0 +1,6 @@
+{
+	"appId": "com.hw2p.app",
+	"appName": "hw2p",
+	"webDir": "dist/hw2p",
+	"bundledWebRuntime": false
+}

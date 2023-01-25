@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">hw2p</string>
+    <string name="title_activity_main">hw2p</string>
+    <string name="package_name">com.hw2p.app</string>
+    <string name="custom_url_scheme">com.hw2p.app</string>
+</resources>
